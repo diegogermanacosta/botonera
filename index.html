@@ -301,7 +301,12 @@
         // Crear nodo de ganancia (volumen) para cada sonido
         gainNodes[soundNum] = audioContext.createGain();
         gainNodes[soundNum].connect(audioContext.destination);
-        gainNodes[soundNum].gain.value = 1.0;
+
+        // Cargar volumen guardado o usar 100% por defecto
+        const savedVolume = localStorage.getItem(`sound${soundNum}Volume`);
+        const volumeValue =
+          savedVolume !== null ? parseFloat(savedVolume) : 1.0;
+        gainNodes[soundNum].gain.value = volumeValue;
 
         // Cargar audio
         fetch(`sound${soundNum}.mp3`)
@@ -313,6 +318,17 @@
           .catch((err) =>
             console.error(`Error cargando sound${soundNum}.mp3:`, err)
           );
+      });
+
+      // Restaurar valores de volumen en los sliders
+      volumeSliders.forEach((slider) => {
+        const soundNum = slider.dataset.sound;
+        const savedVolume = localStorage.getItem(`sound${soundNum}Volume`);
+        if (savedVolume !== null) {
+          const volumePercent = Math.round(parseFloat(savedVolume) * 100);
+          slider.value = volumePercent;
+          slider.nextElementSibling.textContent = volumePercent + "%";
+        }
       });
 
       // Reproducir efectos
@@ -351,6 +367,9 @@
           const volume = this.value / 100;
           gainNodes[soundNum].gain.value = volume;
           valueDisplay.textContent = this.value + "%";
+
+          // Guardar en localStorage
+          localStorage.setItem(`sound${soundNum}Volume`, volume);
         });
       });
 
@@ -369,7 +388,12 @@
         // Crear nodo de ganancia para cada pista
         trackGainNodes[trackNum] = audioContext.createGain();
         trackGainNodes[trackNum].connect(audioContext.destination);
-        trackGainNodes[trackNum].gain.value = 0.5;
+
+        // Cargar volumen guardado o usar 50% por defecto
+        const savedVolume = localStorage.getItem(`track${trackNum}Volume`);
+        const volumeValue =
+          savedVolume !== null ? parseFloat(savedVolume) : 0.5;
+        trackGainNodes[trackNum].gain.value = volumeValue;
 
         // Cargar pista
         fetch(`track${trackNum}.mp3`)
@@ -381,6 +405,17 @@
           .catch((err) =>
             console.error(`Error cargando track${trackNum}.mp3:`, err)
           );
+      });
+
+      // Restaurar valores de volumen en los sliders de pistas
+      trackSliders.forEach((slider) => {
+        const trackNum = slider.dataset.track;
+        const savedVolume = localStorage.getItem(`track${trackNum}Volume`);
+        if (savedVolume !== null) {
+          const volumePercent = Math.round(parseFloat(savedVolume) * 100);
+          slider.value = volumePercent;
+          slider.nextElementSibling.textContent = volumePercent + "%";
+        }
       });
 
       // Play/Pause de pistas
@@ -405,6 +440,9 @@
             trackSources[trackNum].isPlaying = false;
             this.classList.remove("playing");
             this.textContent = "▶";
+
+            // Guardar estado como detenido
+            localStorage.setItem(`track${trackNum}Playing`, "false");
             return;
           }
 
@@ -419,6 +457,9 @@
 
           this.classList.add("playing");
           this.textContent = "⏸";
+
+          // Guardar estado como reproduciendo
+          localStorage.setItem(`track${trackNum}Playing`, "true");
         });
       });
 
@@ -437,6 +478,9 @@
 
           playButton.classList.remove("playing");
           playButton.textContent = "▶";
+
+          // Guardar estado como detenido
+          localStorage.setItem(`track${trackNum}Playing`, "false");
         });
       });
 
@@ -449,8 +493,26 @@
           const volume = this.value / 100;
           trackGainNodes[trackNum].gain.value = volume;
           valueDisplay.textContent = this.value + "%";
+
+          // Guardar en localStorage
+          localStorage.setItem(`track${trackNum}Volume`, volume);
         });
       });
+
+      // === LOG DE ESTADOS GUARDADOS ===
+      console.log(
+        "✅ Todos los estados se guardan automáticamente en localStorage"
+      );
+      console.log("🎨 Modo oscuro:", localStorage.getItem("darkMode"));
+      console.log("📊 Volúmenes guardados:");
+      for (let i = 1; i <= 12; i++) {
+        const vol = localStorage.getItem(`sound${i}Volume`);
+        if (vol) console.log(`  Sound ${i}: ${Math.round(vol * 100)}%`);
+      }
+      for (let i = 1; i <= 2; i++) {
+        const vol = localStorage.getItem(`track${i}Volume`);
+        if (vol) console.log(`  Track ${i}: ${Math.round(vol * 100)}%`);
+      }
     </script>
   </body>
 </html>
