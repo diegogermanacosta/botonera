@@ -4,286 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Botonera de Sonidos</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Arial", sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 20px;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      h1 {
-        text-align: center;
-        color: white;
-        margin-bottom: 30px;
-        font-size: 2.5em;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      h2 {
-        color: white;
-        margin: 30px 0 15px 0;
-        font-size: 1.8em;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      }
-
-      .sound-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        margin-bottom: 20px;
-      }
-
-      .sound-item {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .sound-button {
-        padding: 25px 15px;
-        font-size: 1em;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(145deg, #6366f1, #8b5cf6);
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .sound-button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      }
-
-      .sound-button.playing {
-        animation: pulse 0.5s ease-in-out;
-        background: linear-gradient(145deg, #f59e0b, #ef4444);
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
-
-      .volume-control {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 255, 255, 0.15);
-        padding: 8px 10px;
-        border-radius: 10px;
-      }
-
-      .volume-label {
-        color: white;
-        font-size: 0.85em;
-        flex-shrink: 0;
-      }
-
-      .volume-slider {
-        flex: 1;
-        min-width: 0;
-        height: 6px;
-        -webkit-appearance: none;
-        appearance: none;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 5px;
-        outline: none;
-      }
-
-      .volume-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        background: white;
-        cursor: pointer;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      }
-
-      .volume-slider::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        background: white;
-        cursor: pointer;
-        border-radius: 50%;
-        border: none;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      }
-
-      .volume-value {
-        color: white;
-        font-weight: bold;
-        font-size: 0.85em;
-        min-width: 40px;
-        flex-shrink: 0;
-        text-align: right;
-      }
-
-      .ambient-section {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        padding: 20px;
-      }
-
-      .ambient-tracks {
-        display: grid;
-        gap: 15px;
-      }
-
-      .ambient-track {
-        background: rgba(255, 255, 255, 0.15);
-        padding: 15px;
-        border-radius: 15px;
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        gap: 15px;
-      }
-
-      .track-name {
-        color: white;
-        font-weight: bold;
-        font-size: 1.1em;
-        min-width: 150px;
-      }
-
-      .track-controls {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        flex: 1;
-      }
-
-      .play-button {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: none;
-        background: linear-gradient(145deg, #10b981, #059669);
-        color: white;
-        font-size: 1.2em;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .play-button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .play-button.playing {
-        background: linear-gradient(145deg, #ef4444, #dc2626);
-      }
-
-      .track-volume {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .track-volume-slider {
-        flex: 1;
-        height: 8px;
-        -webkit-appearance: none;
-        appearance: none;
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 5px;
-        outline: none;
-      }
-
-      .track-volume-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 18px;
-        height: 18px;
-        background: white;
-        cursor: pointer;
-        border-radius: 50%;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      }
-
-      .track-volume-slider::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
-        background: white;
-        cursor: pointer;
-        border-radius: 50%;
-        border: none;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      }
-
-      .volume-value {
-        color: white;
-        font-weight: bold;
-        min-width: 45px;
-        text-align: right;
-      }
-
-      .instructions {
-        text-align: center;
-        color: white;
-        margin-top: 20px;
-        font-size: 0.9em;
-        opacity: 0.8;
-        line-height: 1.6;
-      }
-
-      @media (max-width: 768px) {
-        h1 {
-          font-size: 2em;
-        }
-        h2 {
-          font-size: 1.5em;
-        }
-
-        .sound-grid {
-          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-          gap: 10px;
-        }
-
-        .sound-button {
-          padding: 20px 10px;
-          font-size: 0.9em;
-        }
-
-        .ambient-track {
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-
-        .track-name {
-          min-width: auto;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
@@ -295,14 +16,7 @@
           <button class="sound-button" data-sound="1">🐺 Aullido lobo</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="1"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="1" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -311,14 +25,7 @@
           <button class="sound-button" data-sound="2">🚪 Puerta abre</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="2"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="2" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -327,14 +34,7 @@
           <button class="sound-button" data-sound="3">🚪 Puerta cierra</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="3"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="3" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -343,14 +43,7 @@
           <button class="sound-button" data-sound="4">🔥 Fosforo</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="4"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="4" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -359,14 +52,7 @@
           <button class="sound-button" data-sound="5">🐴 Carruaje</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="5"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="5" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -375,14 +61,7 @@
           <button class="sound-button" data-sound="6">😭 Llanto</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="6"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="6" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -391,32 +70,16 @@
           <button class="sound-button" data-sound="7">🤥 Pinocho trans</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="7"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="7" />
             <span class="volume-value">100%</span>
           </div>
         </div>
 
         <div class="sound-item">
-          <button class="sound-button" data-sound="8">
-            🪵 Arrastra Pinocho
-          </button>
+          <button class="sound-button" data-sound="8">🪵 Arrastra Pinocho</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="8"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="8" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -425,14 +88,7 @@
           <button class="sound-button" data-sound="9">🪵 Mueve madera</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="9"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="9" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -441,14 +97,7 @@
           <button class="sound-button" data-sound="10">🧹 Escoba</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="10"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="10" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -457,14 +106,7 @@
           <button class="sound-button" data-sound="11">🏃 Escape</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="11"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="11" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -473,14 +115,7 @@
           <button class="sound-button" data-sound="12">👏 Aplausos</button>
           <div class="volume-control">
             <span class="volume-label">🔊</span>
-            <input
-              type="range"
-              class="volume-slider"
-              min="0"
-              max="100"
-              value="100"
-              data-sound="12"
-            />
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="12" />
             <span class="volume-value">100%</span>
           </div>
         </div>
@@ -493,16 +128,10 @@
             <div class="track-name">Pista 1</div>
             <div class="track-controls">
               <button class="play-button" data-track="1">▶</button>
+              <button class="stop-button" data-track="1">⏹</button>
               <div class="track-volume">
                 <span>🔊</span>
-                <input
-                  type="range"
-                  class="track-volume-slider"
-                  min="0"
-                  max="100"
-                  value="50"
-                  data-track="1"
-                />
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="1" />
                 <span class="volume-value">50%</span>
               </div>
             </div>
@@ -512,16 +141,10 @@
             <div class="track-name">Pista 2</div>
             <div class="track-controls">
               <button class="play-button" data-track="2">▶</button>
+              <button class="stop-button" data-track="2">⏹</button>
               <div class="track-volume">
                 <span>🔊</span>
-                <input
-                  type="range"
-                  class="track-volume-slider"
-                  min="0"
-                  max="100"
-                  value="50"
-                  data-track="2"
-                />
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="2" />
                 <span class="volume-value">50%</span>
               </div>
             </div>
@@ -573,6 +196,7 @@
 
       // === MÚSICA AMBIENTE ===
       const playButtons = document.querySelectorAll(".play-button");
+      const stopButtons = document.querySelectorAll(".stop-button");
       const trackSliders = document.querySelectorAll(".track-volume-slider");
       const trackCache = {};
 
@@ -603,6 +227,20 @@
             this.classList.remove("playing");
             this.textContent = "▶";
           }
+        });
+      });
+
+      // Stop de pistas
+      stopButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const trackNum = this.dataset.track;
+          const audio = trackCache[trackNum];
+          const playButton = document.querySelector(`.play-button[data-track="${trackNum}"]`);
+
+          audio.pause();
+          audio.currentTime = 0;
+          playButton.classList.remove("playing");
+          playButton.textContent = "▶";
         });
       });
 
