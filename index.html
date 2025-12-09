@@ -1,164 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Botonera de Sonidos</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
+      .container {
+        max-width: 800px;
+        width: 100%;
+      }
 
+      h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .sound-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+      }
+
+      .sound-button {
+        padding: 30px 20px;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(145deg, #6366f1, #8b5cf6);
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .sound-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .sound-button:active {
+        transform: translateY(-2px);
+      }
+
+      .sound-button.playing {
+        animation: pulse 0.5s ease-in-out;
+        background: linear-gradient(145deg, #f59e0b, #ef4444);
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .instructions {
+        text-align: center;
+        color: white;
+        margin-top: 20px;
+        font-size: 0.9em;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 600px) {
         h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 2em;
         }
 
         .sound-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 10px;
+          padding: 15px;
         }
 
         .sound-button {
-            padding: 30px 20px;
-            font-size: 1.1em;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(145deg, #6366f1, #8b5cf6);
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
+          padding: 25px 15px;
+          font-size: 1em;
         }
-
-        .sound-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .sound-button:active {
-            transform: translateY(-2px);
-        }
-
-        .sound-button.playing {
-            animation: pulse 0.5s ease-in-out;
-            background: linear-gradient(145deg, #f59e0b, #ef4444);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .instructions {
-            text-align: center;
-            color: white;
-            margin-top: 20px;
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
-            
-            .sound-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 10px;
-                padding: 15px;
-            }
-            
-            .sound-button {
-                padding: 25px 15px;
-                font-size: 1em;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🔊 Botonera de Sonidos</h1>
-        
-        <div class="sound-grid">
-            <button class="sound-button" data-sound="1">Sonido 1</button>
-            <button class="sound-button" data-sound="2">Sonido 2</button>
-            <button class="sound-button" data-sound="3">Sonido 3</button>
-            <button class="sound-button" data-sound="4">Sonido 4</button>
-            <button class="sound-button" data-sound="5">Sonido 5</button>
-            <button class="sound-button" data-sound="6">Sonido 6</button>
-            <button class="sound-button" data-sound="7">Sonido 7</button>
-            <button class="sound-button" data-sound="8">Sonido 8</button>
-            <button class="sound-button" data-sound="9">Sonido 9</button>
-            <button class="sound-button" data-sound="10">Sonido 10</button>
-            <button class="sound-button" data-sound="11">Sonido 11</button>
-            <button class="sound-button" data-sound="12">Sonido 12</button>
-        </div>
+      <h1>🔊 Botonera de Mimorrrrrrr 🍑💨</h1>
 
-        <p class="instructions">
-            💡 Sube tus archivos de audio (sound1.mp3 a sound12.mp3) en la misma carpeta
-        </p>
+      <div class="sound-grid">
+        <button class="sound-button" data-sound="1">aullido lobo</button>
+        <button class="sound-button" data-sound="2">puerta abre</button>
+        <button class="sound-button" data-sound="3">puerta cierra</button>
+        <button class="sound-button" data-sound="4">Sonido 4</button>
+        <button class="sound-button" data-sound="5">Sonido 5</button>
+        <button class="sound-button" data-sound="6">Sonido 6</button>
+        <button class="sound-button" data-sound="7">Sonido 7</button>
+        <button class="sound-button" data-sound="8">Sonido 8</button>
+        <button class="sound-button" data-sound="9">Sonido 9</button>
+        <button class="sound-button" data-sound="10">Sonido 10</button>
+        <button class="sound-button" data-sound="11">Sonido 11</button>
+        <button class="sound-button" data-sound="12">Sonido 12</button>
+      </div>
+
+      <p class="instructions">
+        💡 Sube tus archivos de audio (sound1.mp3 a sound12.mp3) en la misma
+        carpeta
+      </p>
     </div>
 
     <script>
-        const buttons = document.querySelectorAll('.sound-button');
-        const audioCache = {};
+      const buttons = document.querySelectorAll(".sound-button");
+      const audioCache = {};
 
-        // Pre-cargar todos los audios
-        buttons.forEach(button => {
-            const soundNum = button.dataset.sound;
-            audioCache[soundNum] = new Audio(`sound${soundNum}.mp3`);
-        });
+      // Pre-cargar todos los audios
+      buttons.forEach((button) => {
+        const soundNum = button.dataset.sound;
+        audioCache[soundNum] = new Audio(`sound${soundNum}.mp3`);
+      });
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const soundNum = this.dataset.sound;
-                const audio = audioCache[soundNum];
-                
-                // Reiniciar el audio si ya está sonando
-                audio.currentTime = 0;
-                
-                // Reproducir
-                audio.play().catch(err => {
-                    console.error('Error al reproducir:', err);
-                    alert('No se pudo cargar el archivo sound' + soundNum + '.mp3');
-                });
-                
-                // Animación visual
-                this.classList.add('playing');
-                setTimeout(() => {
-                    this.classList.remove('playing');
-                }, 500);
-            });
+      buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+          const soundNum = this.dataset.sound;
+          const audio = audioCache[soundNum];
+
+          // Reiniciar el audio si ya está sonando
+          audio.currentTime = 0;
+
+          // Reproducir
+          audio.play().catch((err) => {
+            console.error("Error al reproducir:", err);
+            alert("No se pudo cargar el archivo sound" + soundNum + ".mp3");
+          });
+
+          // Animación visual
+          this.classList.add("playing");
+          setTimeout(() => {
+            this.classList.remove("playing");
+          }, 500);
         });
+      });
     </script>
-</body>
+  </body>
 </html>
