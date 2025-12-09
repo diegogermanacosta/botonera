@@ -256,28 +256,58 @@
     </div>
 
     <script>
+      // === WEB AUDIO API SETUP (funciona en iOS) ===
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const audioContext = new AudioContext();
+
       // === EFECTOS DE SONIDO ===
       const soundButtons = document.querySelectorAll(".sound-button");
       const volumeSliders = document.querySelectorAll(".volume-slider");
       const audioCache = {};
+      const gainNodes = {};
 
       // Pre-cargar efectos de sonido
       soundButtons.forEach((button) => {
         const soundNum = button.dataset.sound;
-        audioCache[soundNum] = new Audio(`sound${soundNum}.mp3`);
+
+        // Crear nodo de ganancia (volumen) para cada sonido
+        gainNodes[soundNum] = audioContext.createGain();
+        gainNodes[soundNum].connect(audioContext.destination);
+        gainNodes[soundNum].gain.value = 1.0;
+
+        // Cargar audio
+        fetch(`sound${soundNum}.mp3`)
+          .then((response) => response.arrayBuffer())
+          .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+          .then((audioBuffer) => {
+            audioCache[soundNum] = audioBuffer;
+          })
+          .catch((err) =>
+            console.error(`Error cargando sound${soundNum}.mp3:`, err)
+          );
       });
 
       // Reproducir efectos
       soundButtons.forEach((button) => {
         button.addEventListener("click", function () {
-          const soundNum = this.dataset.sound;
-          const audio = audioCache[soundNum];
+          // Reanudar contexto de audio si está suspendido (requisito iOS)
+          if (audioContext.state === "suspended") {
+            audioContext.resume();
+          }
 
-          audio.currentTime = 0;
-          audio.play().catch((err) => {
-            console.error("Error al reproducir:", err);
+          const soundNum = this.dataset.sound;
+          const audioBuffer = audioCache[soundNum];
+
+          if (!audioBuffer) {
             alert("No se pudo cargar sound" + soundNum + ".mp3");
-          });
+            return;
+          }
+
+          // Crear source node
+          const source = audioContext.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(gainNodes[soundNum]);
+          source.start(0);
 
           this.classList.add("playing");
           setTimeout(() => this.classList.remove("playing"), 500);
@@ -291,7 +321,7 @@
 
         slider.addEventListener("input", function () {
           const volume = this.value / 100;
-          audioCache[soundNum].volume = volume;
+          gainNodes[soundNum].gain.value = volume;
           valueDisplay.textContent = this.value + "%";
         });
       });
@@ -301,34 +331,66 @@
       const stopButtons = document.querySelectorAll(".stop-button");
       const trackSliders = document.querySelectorAll(".track-volume-slider");
       const trackCache = {};
+      const trackGainNodes = {};
+      const trackSources = {};
 
       // Pre-cargar pistas de ambiente
       playButtons.forEach((button) => {
         const trackNum = button.dataset.track;
-        const audio = new Audio(`track${trackNum}.mp3`);
-        audio.loop = true;
-        audio.volume = 0.5;
-        trackCache[trackNum] = audio;
+
+        // Crear nodo de ganancia para cada pista
+        trackGainNodes[trackNum] = audioContext.createGain();
+        trackGainNodes[trackNum].connect(audioContext.destination);
+        trackGainNodes[trackNum].gain.value = 0.5;
+
+        // Cargar pista
+        fetch(`track${trackNum}.mp3`)
+          .then((response) => response.arrayBuffer())
+          .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
+          .then((audioBuffer) => {
+            trackCache[trackNum] = audioBuffer;
+          })
+          .catch((err) =>
+            console.error(`Error cargando track${trackNum}.mp3:`, err)
+          );
       });
 
       // Play/Pause de pistas
       playButtons.forEach((button) => {
         button.addEventListener("click", function () {
-          const trackNum = this.dataset.track;
-          const audio = trackCache[trackNum];
+          // Reanudar contexto de audio si está suspendido
+          if (audioContext.state === "suspended") {
+            audioContext.resume();
+          }
 
-          if (audio.paused) {
-            audio.play().catch((err) => {
-              console.error("Error al reproducir:", err);
-              alert("No se pudo cargar track" + trackNum + ".mp3");
-            });
-            this.classList.add("playing");
-            this.textContent = "⏸";
-          } else {
-            audio.pause();
+          const trackNum = this.dataset.track;
+          const audioBuffer = trackCache[trackNum];
+
+          if (!audioBuffer) {
+            alert("No se pudo cargar track" + trackNum + ".mp3");
+            return;
+          }
+
+          // Si ya está sonando, pausar (parar)
+          if (trackSources[trackNum] && trackSources[trackNum].isPlaying) {
+            trackSources[trackNum].source.stop();
+            trackSources[trackNum].isPlaying = false;
             this.classList.remove("playing");
             this.textContent = "▶";
+            return;
           }
+
+          // Crear nuevo source (con loop)
+          const source = audioContext.createBufferSource();
+          source.buffer = audioBuffer;
+          source.loop = true;
+          source.connect(trackGainNodes[trackNum]);
+          source.start(0);
+
+          trackSources[trackNum] = { source: source, isPlaying: true };
+
+          this.classList.add("playing");
+          this.textContent = "⏸";
         });
       });
 
@@ -336,13 +398,15 @@
       stopButtons.forEach((button) => {
         button.addEventListener("click", function () {
           const trackNum = this.dataset.track;
-          const audio = trackCache[trackNum];
           const playButton = document.querySelector(
             `.play-button[data-track="${trackNum}"]`
           );
 
-          audio.pause();
-          audio.currentTime = 0;
+          if (trackSources[trackNum] && trackSources[trackNum].isPlaying) {
+            trackSources[trackNum].source.stop();
+            trackSources[trackNum].isPlaying = false;
+          }
+
           playButton.classList.remove("playing");
           playButton.textContent = "▶";
         });
@@ -355,7 +419,7 @@
 
         slider.addEventListener("input", function () {
           const volume = this.value / 100;
-          trackCache[trackNum].volume = volume;
+          trackGainNodes[trackNum].gain.value = volume;
           valueDisplay.textContent = this.value + "%";
         });
       });

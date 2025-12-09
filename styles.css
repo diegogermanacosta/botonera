@@ -91,8 +91,13 @@ h2 {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .volume-control {
@@ -192,7 +197,8 @@ h2 {
   min-width: 0;
 }
 
-.play-button, .stop-button {
+.play-button,
+.stop-button {
   width: clamp(40px, 5vw, 55px);
   height: clamp(40px, 5vw, 55px);
   border-radius: 50%;
@@ -286,11 +292,11 @@ h2 {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2, 1fr);
   }
-  
+
   .sound-button {
     font-size: clamp(0.75rem, 2.5vw, 1.1rem);
   }
-  
+
   .track-name {
     font-size: clamp(0.85rem, 3vw, 1.2rem);
   }
@@ -305,20 +311,20 @@ h2 {
   h2 {
     font-size: clamp(0.9rem, 4vw, 1.2rem);
   }
-  
+
   .sound-button {
     padding: clamp(6px, 1.5vw, 12px);
     font-size: clamp(0.7rem, 3vw, 1rem);
   }
-  
+
   .volume-control {
     padding: 4px 6px;
   }
-  
+
   .volume-label {
     font-size: clamp(0.7rem, 3vw, 1rem);
   }
-  
+
   .volume-value {
     font-size: clamp(0.65rem, 2.5vw, 0.9rem);
     min-width: clamp(30px, 8vw, 45px);
@@ -330,15 +336,16 @@ h2 {
   .sound-button {
     font-size: 1.4rem;
   }
-  
+
   .track-name {
     font-size: 1.6rem;
   }
-  
-  .volume-label, .track-volume {
+
+  .volume-label,
+  .track-volume {
     font-size: 1.4rem;
   }
-  
+
   .volume-value {
     font-size: 1.3rem;
   }
