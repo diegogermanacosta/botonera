@@ -8,13 +8,14 @@ body {
   font-family: "Arial", sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  padding: 15px;
-  overflow-x: hidden;
+  height: 100vh;
+  padding: 1vh 1vw;
+  overflow: hidden;
 }
 
 .container {
-  max-width: 100vw;
-  height: 100vh;
+  max-width: 100%;
+  height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -23,15 +24,15 @@ body {
 h1 {
   text-align: center;
   color: white;
-  margin-bottom: 15px;
-  font-size: 2em;
+  margin-bottom: 1vh;
+  font-size: clamp(1.2rem, 3vw, 2.5rem);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 h2 {
   color: white;
-  margin: 15px 0 10px 0;
-  font-size: 1.4em;
+  margin: 1vh 0;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -40,42 +41,48 @@ h2 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 12px;
-  padding: 15px;
+  gap: clamp(8px, 1vw, 15px);
+  padding: clamp(10px, 1.5vh, 20px);
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  margin-bottom: 15px;
+  margin-bottom: 1vh;
   flex: 1;
+  min-height: 0;
 }
 
 .sound-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: clamp(4px, 0.5vh, 8px);
+  min-height: 0;
 }
 
 .sound-button {
   flex: 1;
-  padding: 15px 10px;
-  font-size: 1.1em;
+  padding: clamp(8px, 1vh, 15px) clamp(5px, 0.5vw, 10px);
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem);
   font-weight: bold;
   color: white;
   background: linear-gradient(145deg, #6366f1, #8b5cf6);
   border: none;
-  border-radius: 15px;
+  border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.4;
+  line-height: 1.3;
+  text-align: center;
+  min-height: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sound-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .sound-button.playing {
@@ -84,34 +91,30 @@ h2 {
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .volume-control {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: clamp(4px, 0.5vw, 8px);
   background: rgba(255, 255, 255, 0.15);
-  padding: 6px 10px;
+  padding: clamp(4px, 0.5vh, 8px) clamp(6px, 1vw, 12px);
   border-radius: 10px;
+  min-height: 0;
 }
 
 .volume-label {
   color: white;
-  font-size: 1.1em;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem);
   flex-shrink: 0;
 }
 
 .volume-slider {
   flex: 1;
   min-width: 0;
-  height: 6px;
+  height: clamp(4px, 0.5vh, 8px);
   -webkit-appearance: none;
   appearance: none;
   background: rgba(255, 255, 255, 0.3);
@@ -122,8 +125,8 @@ h2 {
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: clamp(12px, 1.5vw, 18px);
+  height: clamp(12px, 1.5vw, 18px);
   background: white;
   cursor: pointer;
   border-radius: 50%;
@@ -131,8 +134,8 @@ h2 {
 }
 
 .volume-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: clamp(12px, 1.5vw, 18px);
+  height: clamp(12px, 1.5vw, 18px);
   background: white;
   cursor: pointer;
   border-radius: 50%;
@@ -143,8 +146,8 @@ h2 {
 .volume-value {
   color: white;
   font-weight: bold;
-  font-size: 1em;
-  min-width: 45px;
+  font-size: clamp(0.75rem, 1.3vw, 1.1rem);
+  min-width: clamp(35px, 4vw, 50px);
   flex-shrink: 0;
   text-align: right;
 }
@@ -154,50 +157,59 @@ h2 {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   backdrop-filter: blur(10px);
-  padding: 15px;
+  padding: clamp(10px, 1.5vh, 20px);
+  flex-shrink: 0;
 }
 
 .ambient-tracks {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  gap: clamp(8px, 1vw, 15px);
 }
 
 .ambient-track {
   background: rgba(255, 255, 255, 0.15);
-  padding: 15px;
+  padding: clamp(10px, 1.5vh, 15px);
   border-radius: 15px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: clamp(8px, 1vw, 15px);
 }
 
 .track-name {
   color: white;
   font-weight: bold;
-  font-size: 1.3em;
-  min-width: 80px;
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  min-width: clamp(60px, 8vw, 100px);
+  flex-shrink: 0;
 }
 
 .track-controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: clamp(8px, 1vw, 15px);
   flex: 1;
+  min-width: 0;
 }
 
-.play-button {
-  width: 50px;
-  height: 50px;
+.play-button, .stop-button {
+  width: clamp(40px, 5vw, 55px);
+  height: clamp(40px, 5vw, 55px);
   border-radius: 50%;
   border: none;
-  background: linear-gradient(145deg, #10b981, #059669);
   color: white;
-  font-size: 1.3em;
+  font-size: clamp(1rem, 1.8vw, 1.4rem);
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button {
+  background: linear-gradient(145deg, #10b981, #059669);
 }
 
 .play-button:hover {
@@ -210,17 +222,7 @@ h2 {
 }
 
 .stop-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: none;
   background: linear-gradient(145deg, #6366f1, #4f46e5);
-  color: white;
-  font-size: 1.1em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  flex-shrink: 0;
 }
 
 .stop-button:hover {
@@ -232,13 +234,15 @@ h2 {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.2em;
+  gap: clamp(6px, 1vw, 12px);
+  font-size: clamp(0.9rem, 1.5vw, 1.3rem);
+  min-width: 0;
 }
 
 .track-volume-slider {
   flex: 1;
-  height: 8px;
+  min-width: 0;
+  height: clamp(6px, 0.8vh, 10px);
   -webkit-appearance: none;
   appearance: none;
   background: rgba(255, 255, 255, 0.3);
@@ -249,8 +253,8 @@ h2 {
 .track-volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: clamp(14px, 2vw, 20px);
+  height: clamp(14px, 2vw, 20px);
   background: white;
   cursor: pointer;
   border-radius: 50%;
@@ -258,8 +262,8 @@ h2 {
 }
 
 .track-volume-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: clamp(14px, 2vw, 20px);
+  height: clamp(14px, 2vw, 20px);
   background: white;
   cursor: pointer;
   border-radius: 50%;
@@ -269,6 +273,10 @@ h2 {
 
 /* RESPONSIVE - PANTALLA VERTICAL */
 @media (orientation: portrait) {
+  body {
+    padding: 1vh 2vw;
+  }
+
   .sound-grid {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
@@ -278,53 +286,60 @@ h2 {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2, 1fr);
   }
-
-  h1 {
-    font-size: 1.8em;
+  
+  .sound-button {
+    font-size: clamp(0.75rem, 2.5vw, 1.1rem);
   }
-
-  h2 {
-    font-size: 1.2em;
+  
+  .track-name {
+    font-size: clamp(0.85rem, 3vw, 1.2rem);
   }
 }
 
-/* PANTALLAS MUY PEQUEÑAS */
-@media (max-width: 500px) {
-  body {
-    padding: 10px;
-  }
-
+/* PANTALLAS PEQUEÑAS */
+@media (max-width: 600px) {
   h1 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+    font-size: clamp(1rem, 5vw, 1.5rem);
   }
 
   h2 {
-    font-size: 1.1em;
-    margin: 10px 0 8px 0;
+    font-size: clamp(0.9rem, 4vw, 1.2rem);
   }
-
+  
   .sound-button {
-    font-size: 1em;
-    padding: 12px 8px;
+    padding: clamp(6px, 1.5vw, 12px);
+    font-size: clamp(0.7rem, 3vw, 1rem);
   }
-
-  .track-name {
-    font-size: 1.1em;
-    min-width: 60px;
-  }
-
-  .play-button, .stop-button {
-    width: 45px;
-    height: 45px;
+  
+  .volume-control {
+    padding: 4px 6px;
   }
   
   .volume-label {
-    font-size: 1em;
+    font-size: clamp(0.7rem, 3vw, 1rem);
   }
   
   .volume-value {
-    font-size: 0.9em;
-    min-width: 42px;
+    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
+    min-width: clamp(30px, 8vw, 45px);
+  }
+}
+
+/* PANTALLAS MUY GRANDES */
+@media (min-width: 1920px) {
+  .sound-button {
+    font-size: 1.4rem;
+  }
+  
+  .track-name {
+    font-size: 1.6rem;
+  }
+  
+  .volume-label, .track-volume {
+    font-size: 1.4rem;
+  }
+  
+  .volume-value {
+    font-size: 1.3rem;
   }
 }
