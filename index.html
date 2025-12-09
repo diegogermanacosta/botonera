@@ -15,15 +15,12 @@
         font-family: "Arial", sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         padding: 20px;
       }
 
       .container {
-        max-width: 800px;
-        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
       }
 
       h1 {
@@ -34,19 +31,33 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
       }
 
+      h2 {
+        color: white;
+        margin: 30px 0 15px 0;
+        font-size: 1.8em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
       .sound-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 15px;
         padding: 20px;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 20px;
         backdrop-filter: blur(10px);
+        margin-bottom: 20px;
+      }
+
+      .sound-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
       .sound-button {
-        padding: 30px 20px;
-        font-size: 1.1em;
+        padding: 25px 15px;
+        font-size: 1em;
         font-weight: bold;
         color: white;
         background: linear-gradient(145deg, #6366f1, #8b5cf6);
@@ -55,17 +66,11 @@
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        position: relative;
-        overflow: hidden;
       }
 
       .sound-button:hover {
-        transform: translateY(-5px);
+        transform: translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      }
-
-      .sound-button:active {
-        transform: translateY(-2px);
       }
 
       .sound-button.playing {
@@ -74,13 +79,157 @@
       }
 
       @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 8px;
+        border-radius: 10px;
+      }
+
+      .volume-label {
+        color: white;
+        font-size: 0.85em;
+        min-width: 35px;
+      }
+
+      .volume-slider {
+        flex: 1;
+        height: 6px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        outline: none;
+      }
+
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: white;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .volume-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        background: white;
+        cursor: pointer;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .ambient-section {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        padding: 20px;
+      }
+
+      .ambient-tracks {
+        display: grid;
+        gap: 15px;
+      }
+
+      .ambient-track {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px;
+        border-radius: 15px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .track-name {
+        color: white;
+        font-weight: bold;
+        font-size: 1.1em;
+        min-width: 150px;
+      }
+
+      .track-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex: 1;
+      }
+
+      .play-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: none;
+        background: linear-gradient(145deg, #10b981, #059669);
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .play-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .play-button.playing {
+        background: linear-gradient(145deg, #ef4444, #dc2626);
+      }
+
+      .track-volume {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .track-volume-slider {
+        flex: 1;
+        height: 8px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        outline: none;
+      }
+
+      .track-volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: white;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .track-volume-slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: white;
+        cursor: pointer;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .volume-value {
+        color: white;
+        font-weight: bold;
+        min-width: 45px;
+        text-align: right;
       }
 
       .instructions {
@@ -89,22 +238,30 @@
         margin-top: 20px;
         font-size: 0.9em;
         opacity: 0.8;
+        line-height: 1.6;
       }
 
-      @media (max-width: 600px) {
-        h1 {
-          font-size: 2em;
-        }
-
+      @media (max-width: 768px) {
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5em; }
+        
         .sound-grid {
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
           gap: 10px;
-          padding: 15px;
         }
 
         .sound-button {
-          padding: 25px 15px;
-          font-size: 1em;
+          padding: 20px 10px;
+          font-size: 0.9em;
+        }
+
+        .ambient-track {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .track-name {
+          min-width: auto;
         }
       }
     </style>
@@ -113,56 +270,261 @@
     <div class="container">
       <h1>🔊 Botonera de Mimorcito</h1>
 
+      <h2>Efectos de Sonido</h2>
       <div class="sound-grid">
-        <button class="sound-button" data-sound="1">aullido lobo</button>
-        <button class="sound-button" data-sound="2">puerta abre</button>
-        <button class="sound-button" data-sound="3">puerta cierra</button>
-        <button class="sound-button" data-sound="4">fosforo</button>
-        <button class="sound-button" data-sound="5">carruaje</button>
-        <button class="sound-button" data-sound="6">llanto</button>
-        <button class="sound-button" data-sound="7">pinocho trans</button>
-        <button class="sound-button" data-sound="8">arrastra madera</button>
-        <button class="sound-button" data-sound="9">mueve madera</button>
-        <button class="sound-button" data-sound="10">escoba</button>
-        <button class="sound-button" data-sound="11">escape</button>
-        <button class="sound-button" data-sound="12">aplausos</button>
+        <div class="sound-item">
+          <button class="sound-button" data-sound="1">aullido lobo</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="1">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="2">puerta abre</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="2">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="3">puerta cierra</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="3">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="4">fosforo</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="4">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="5">carruaje</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="5">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="6">llanto</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="6">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="7">pinocho trans</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="7">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="8">arrastra madera</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="8">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="9">mueve madera</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="9">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="10">escoba</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="10">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="11">escape</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="11">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+
+        <div class="sound-item">
+          <button class="sound-button" data-sound="12">aplausos</button>
+          <div class="volume-control">
+            <span class="volume-label">🔊</span>
+            <input type="range" class="volume-slider" min="0" max="100" value="100" data-sound="12">
+            <span class="volume-value">100%</span>
+          </div>
+        </div>
+      </div>
+
+      <h2>🎵 Música Ambiente</h2>
+      <div class="ambient-section">
+        <div class="ambient-tracks">
+          <div class="ambient-track">
+            <div class="track-name">Pista 1</div>
+            <div class="track-controls">
+              <button class="play-button" data-track="1">▶</button>
+              <div class="track-volume">
+                <span>🔊</span>
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="1">
+                <span class="volume-value">50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ambient-track">
+            <div class="track-name">Pista 2</div>
+            <div class="track-controls">
+              <button class="play-button" data-track="2">▶</button>
+              <div class="track-volume">
+                <span>🔊</span>
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="2">
+                <span class="volume-value">50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ambient-track">
+            <div class="track-name">Pista 3</div>
+            <div class="track-controls">
+              <button class="play-button" data-track="3">▶</button>
+              <div class="track-volume">
+                <span>🔊</span>
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="3">
+                <span class="volume-value">50%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ambient-track">
+            <div class="track-name">Pista 4</div>
+            <div class="track-controls">
+              <button class="play-button" data-track="4">▶</button>
+              <div class="track-volume">
+                <span>🔊</span>
+                <input type="range" class="track-volume-slider" min="0" max="100" value="50" data-track="4">
+                <span class="volume-value">50%</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <p class="instructions">
-        💡 Sube tus archivos de audio (sound1.mp3 a sound12.mp3) en la misma
-        carpeta
+        💡 <strong>Efectos:</strong> Sube sound1.mp3 a sound12.mp3<br>
+        🎵 <strong>Ambiente:</strong> Sube track1.mp3 a track4.mp3
       </p>
     </div>
 
     <script>
-      const buttons = document.querySelectorAll(".sound-button");
+      // === EFECTOS DE SONIDO ===
+      const soundButtons = document.querySelectorAll('.sound-button');
+      const volumeSliders = document.querySelectorAll('.volume-slider');
       const audioCache = {};
 
-      // Pre-cargar todos los audios
-      buttons.forEach((button) => {
+      // Pre-cargar efectos de sonido
+      soundButtons.forEach(button => {
         const soundNum = button.dataset.sound;
         audioCache[soundNum] = new Audio(`sound${soundNum}.mp3`);
       });
 
-      buttons.forEach((button) => {
-        button.addEventListener("click", function () {
+      // Reproducir efectos
+      soundButtons.forEach(button => {
+        button.addEventListener('click', function() {
           const soundNum = this.dataset.sound;
           const audio = audioCache[soundNum];
-
-          // Reiniciar el audio si ya está sonando
+          
           audio.currentTime = 0;
-
-          // Reproducir
-          audio.play().catch((err) => {
-            console.error("Error al reproducir:", err);
-            alert("No se pudo cargar el archivo sound" + soundNum + ".mp3");
+          audio.play().catch(err => {
+            console.error('Error al reproducir:', err);
+            alert('No se pudo cargar sound' + soundNum + '.mp3');
           });
+          
+          this.classList.add('playing');
+          setTimeout(() => this.classList.remove('playing'), 500);
+        });
+      });
 
-          // Animación visual
-          this.classList.add("playing");
-          setTimeout(() => {
-            this.classList.remove("playing");
-          }, 500);
+      // Control de volumen de efectos
+      volumeSliders.forEach(slider => {
+        const soundNum = slider.dataset.sound;
+        const valueDisplay = slider.nextElementSibling;
+        
+        slider.addEventListener('input', function() {
+          const volume = this.value / 100;
+          audioCache[soundNum].volume = volume;
+          valueDisplay.textContent = this.value + '%';
+        });
+      });
+
+      // === MÚSICA AMBIENTE ===
+      const playButtons = document.querySelectorAll('.play-button');
+      const trackSliders = document.querySelectorAll('.track-volume-slider');
+      const trackCache = {};
+
+      // Pre-cargar pistas de ambiente
+      playButtons.forEach(button => {
+        const trackNum = button.dataset.track;
+        const audio = new Audio(`track${trackNum}.mp3`);
+        audio.loop = true;
+        audio.volume = 0.5;
+        trackCache[trackNum] = audio;
+      });
+
+      // Play/Pause de pistas
+      playButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const trackNum = this.dataset.track;
+          const audio = trackCache[trackNum];
+          
+          if (audio.paused) {
+            audio.play().catch(err => {
+              console.error('Error al reproducir:', err);
+              alert('No se pudo cargar track' + trackNum + '.mp3');
+            });
+            this.classList.add('playing');
+            this.textContent = '⏸';
+          } else {
+            audio.pause();
+            this.classList.remove('playing');
+            this.textContent = '▶';
+          }
+        });
+      });
+
+      // Control de volumen de pistas
+      trackSliders.forEach(slider => {
+        const trackNum = slider.dataset.track;
+        const valueDisplay = slider.nextElementSibling;
+        
+        slider.addEventListener('input', function() {
+          const volume = this.value / 100;
+          trackCache[trackNum].volume = volume;
+          valueDisplay.textContent = this.value + '%';
         });
       });
     </script>
