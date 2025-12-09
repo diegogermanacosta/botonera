@@ -224,7 +224,6 @@
             <div class="track-name">Pista 1</div>
             <div class="track-controls">
               <button class="play-button" data-track="1">▶</button>
-              <button class="stop-button" data-track="1">⏹</button>
               <div class="track-volume">
                 <span>🔊</span>
                 <input
@@ -244,7 +243,6 @@
             <div class="track-name">Pista 2</div>
             <div class="track-controls">
               <button class="play-button" data-track="2">▶</button>
-              <button class="stop-button" data-track="2">⏹</button>
               <div class="track-volume">
                 <span>🔊</span>
                 <input
@@ -375,7 +373,6 @@
 
       // === MÚSICA AMBIENTE ===
       const playButtons = document.querySelectorAll(".play-button");
-      const stopButtons = document.querySelectorAll(".stop-button");
       const trackSliders = document.querySelectorAll(".track-volume-slider");
       const trackCache = {};
       const trackGainNodes = {};
@@ -394,6 +391,12 @@
         const volumeValue =
           savedVolume !== null ? parseFloat(savedVolume) : 0.5;
         trackGainNodes[trackNum].gain.value = volumeValue;
+
+        // Inicializar tracking
+        trackSources[trackNum] = {
+          source: null,
+          isPlaying: false,
+        };
 
         // Cargar pista
         fetch(`track${trackNum}.mp3`)
@@ -418,7 +421,7 @@
         }
       });
 
-      // Play/Pause de pistas
+      // Play/Stop de pistas (toggle)
       playButtons.forEach((button) => {
         button.addEventListener("click", function () {
           // Reanudar contexto de audio si está suspendido
@@ -428,59 +431,37 @@
 
           const trackNum = this.dataset.track;
           const audioBuffer = trackCache[trackNum];
+          const trackState = trackSources[trackNum];
 
           if (!audioBuffer) {
             alert("No se pudo cargar track" + trackNum + ".mp3");
             return;
           }
 
-          // Si ya está sonando, pausar (parar)
-          if (trackSources[trackNum] && trackSources[trackNum].isPlaying) {
-            trackSources[trackNum].source.stop();
-            trackSources[trackNum].isPlaying = false;
+          // Si está sonando, STOP (detener y resetear)
+          if (trackState.isPlaying) {
+            trackState.source.stop();
+            trackState.isPlaying = false;
+
             this.classList.remove("playing");
             this.textContent = "▶";
-
-            // Guardar estado como detenido
             localStorage.setItem(`track${trackNum}Playing`, "false");
             return;
           }
 
-          // Crear nuevo source (con loop)
+          // Si está detenido, PLAY (empezar desde el inicio)
           const source = audioContext.createBufferSource();
           source.buffer = audioBuffer;
           source.loop = true;
           source.connect(trackGainNodes[trackNum]);
           source.start(0);
 
-          trackSources[trackNum] = { source: source, isPlaying: true };
+          trackState.source = source;
+          trackState.isPlaying = true;
 
           this.classList.add("playing");
-          this.textContent = "⏸";
-
-          // Guardar estado como reproduciendo
+          this.textContent = "⏹";
           localStorage.setItem(`track${trackNum}Playing`, "true");
-        });
-      });
-
-      // Stop de pistas
-      stopButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          const trackNum = this.dataset.track;
-          const playButton = document.querySelector(
-            `.play-button[data-track="${trackNum}"]`
-          );
-
-          if (trackSources[trackNum] && trackSources[trackNum].isPlaying) {
-            trackSources[trackNum].source.stop();
-            trackSources[trackNum].isPlaying = false;
-          }
-
-          playButton.classList.remove("playing");
-          playButton.textContent = "▶";
-
-          // Guardar estado como detenido
-          localStorage.setItem(`track${trackNum}Playing`, "false");
         });
       });
 
